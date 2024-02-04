@@ -30,4 +30,27 @@
         resource_tags:
           Name: Project-PubSub1
       register: pubsub1_out
-      
+
+    - name: Create Public Subnet in Zone2
+      ec2_vpc_subnet:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone2}}"
+        state: "{{state}}"
+        cidr: "{{PubSub2Cidr}}"
+        map_public: yes
+        resource_tags:
+          Name: Project-PubSub2
+      register: pubsub2_out
+    
+    - name: Create Public Subnet in Zone3
+      ec2_vpc_subnet:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone3}}"
+        state: "{{state}}"
+        cidr: "{{PubSub3Cidr}}"
+        map_public: yes
+        resource_tags:
+          Name: Project-PubSub3
+      register: pubsub3_out
