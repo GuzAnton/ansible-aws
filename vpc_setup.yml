@@ -54,3 +54,36 @@
         resource_tags:
           Name: Project-PubSub3
       register: pubsub3_out
+
+    - name: Create Private Subnet in Zone1
+      ec2_vpc_subnet:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone1}}"
+        state: "{{state}}"
+        cidr: "{{PrivSub1Cidr}}"
+        resource_tags:
+          Name: Project-PrivSub1
+      register: privsub1_out
+
+    - name: Create Private Subnet in Zone2
+      ec2_vpc_subnet:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone2}}"
+        state: "{{state}}"
+        cidr: "{{PrivSub2Cidr}}"
+        resource_tags:
+          Name: Project-PrivSub2
+      register: privsub2_out
+
+    - name: Create Private Subnet in Zone3
+      ec2_vpc_subnet:
+        vpc_id: "{{vpcout.vpc.id}}"
+        region: "{{region}}"
+        az: "{{zone3}}"
+        state: "{{state}}"
+        cidr: "{{PrivSub3Cidr}}"
+        resource_tags:
+          Name: Project-PrivSub3
+      register: privsub3_out
