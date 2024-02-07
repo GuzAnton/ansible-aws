@@ -38,7 +38,7 @@
 
   - name: Creating Bastion Host
     ec2:
-      key_name: "bastion-key"
+      key_name: bastion-key
       region: "{{region}}"
       instance_type: t2.micro
       image: "{{bastion_ami}}"
@@ -54,6 +54,7 @@
         Project: Test_Project
         Owner: Tony
       group_id: "{{Bastion_SG_out.group_id}}"
+      vpc_subnet_id: "{{pubsub1id}}"
     register: BastionHost_out  
 
     
