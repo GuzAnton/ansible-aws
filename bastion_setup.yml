@@ -50,10 +50,6 @@
         Project: Test_Project
         Owner: Tony
       exact_count: 1
-      count_tag:
-        Name: "Bastion_host"
-        Project: Test_Project
-        Owner: Tony
       security_group: "{{Bastion_SG_out.group_id}}"
       vpc_subnet_id: "{{pubsub1id}}"
     register: BastionHost_out  
