@@ -4,3 +4,22 @@ gather_facts: no
 tasks: 
   - name: Import VPC setup variables
     include_vars: vars/output_vars
+
+  - name: Import AMI setup variables
+    include_vars: vars/ec2_setup
+
+  - name: Import VPC setup
+    include_vars: vars/vpc_setup
+
+  - name: Create ec2-key-pair
+    ec2-key:
+      name: ec2-project-key
+      region: "{{region}}"
+    register: key_pair_out
+  
+  - name: Save key in a file
+    copy: 
+      content: "key_pair_out.key.private_key"
+      dest: "./ec2-project-key.pem"
+      mode: 0600
+    when: key_pair_out.changed
