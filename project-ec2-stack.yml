@@ -25,3 +25,34 @@
         dest: "./ec2-project-key.pem"
         mode: 0600
       when: key_pair_out.changed
+
+    - name: Create SG for ELB
+      ec2_group:
+        name: Project_ELB-SG
+        description: Allow port 80 from anywhere and all ports within SG
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        rule:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            cidr_ip: 0.0.0.0/0
+      register: ProjectELBSG_out
+
+    - name: Create SG for ec2 stack
+      ec2_group:
+        name: Project_ec2_SG
+        description: Allow port 22 from everywhere and all ports within SG
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        purge_rules: no
+        rule:
+          - proto: tcp
+            from_port: 80
+            to_port: 80
+            group_id: "{{ProjectELBSG_out.group_id}}"
+          
+          - proto:
+            from_port: 22
+            to_port: 22
+            group_id: "{{Bastion_SG_out}}"
