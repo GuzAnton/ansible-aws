@@ -11,7 +11,7 @@ tasks:
   - name: Import VPC setup
     include_vars: vars/vpc_setup
 
-  - name: Create ec2-key-pair
+  - name: Create PROJECT ec2 key
     ec2-key:
       name: ec2-project-key
       region: "{{region}}"
