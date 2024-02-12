@@ -14,7 +14,7 @@
       include_vars: vars/vpc_setup
 
     - name: Create PROJECT ec2 key
-      ec2-key:
+      ec2_key:
         name: ec2-project-key
         region: "{{region}}"
       register: key_pair_out
