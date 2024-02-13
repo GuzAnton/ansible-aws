@@ -187,6 +187,11 @@
       file:
         path: "provision-stack/group_vars"
         state: directory
+    
+    - name: Create file hostip
+      file:
+        path: "provision-stack/group_vars/hostip"
+        state: touch
 
 
     - name: Insert/update Hosts ip & Name in file provision-stack/group_vars/hostsip
