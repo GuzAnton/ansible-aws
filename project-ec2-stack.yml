@@ -178,18 +178,15 @@
           - "{{pubsub2id}}"
           - "{{pubsub3id}}"
 
-    - name: Create directory provision-stack and group_vars
-      hosts: localhost
-      tasks:
-        - name: Create provision-stack
-          file:
-            path: "provision-stack"
-            state: directory
+    - name: Create provision-stack
+      file:
+        path: "provision-stack"
+        state: directory
 
-        - name: Создать папку group_vars внутри provision-stack
-          file:
-            path: "provision-stack/group_vars"
-            state: directory
+    - name: Создать папку group_vars внутри provision-stack
+      file:
+        path: "provision-stack/group_vars"
+        state: directory
 
 
     - name: Insert/update Hosts ip & Name in file provision-stack/group_vars/hostsip
