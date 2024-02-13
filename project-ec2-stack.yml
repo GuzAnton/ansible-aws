@@ -67,22 +67,4 @@
             group_id: "{{Project_ec2_SG_out.group_id}}"
 
 
-    - name: Create NGINX web01
-      ec2_instance:
-        name: "web01"
-        region: "{{region}}"
-        key_name: "ec2-project-key"
-        instance_type: t2.micro
-        image: "{{nginx_ami}}"
-        wait: yes
-        wait_timeout: 300
-        tags:
-          Name: "web01"
-          Project: Project
-          Owner: Tony
-        exact_count: 1
-        security_group: "{{Project_ec2_SG_out.group_id}}"
-        vpc_subnet_id: "{{privsub1id}}"
-      register: web01_out
-
     
