@@ -79,7 +79,7 @@
         image: "{{nginx_ami}}"
         wait: yes
         wait_timeout: 300
-        instance_tags:
+        tags:
           Name: "web01"
           Project: Project
           Owner: Tony
@@ -97,7 +97,7 @@
         image: "{{tomcat_ami}}"
         wait: yes
         wait_timeout: 300
-        instance_tags:
+        tags:
           Name: "app01"
           Project: Project
           Owner: Tony
@@ -115,7 +115,7 @@
         image: "{{memcache_ami}}"
         wait: yes
         wait_timeout: 300
-        instance_tags:
+        tags:
           Name: "mc01"
           Project: Project
           Owner: Tony
@@ -133,7 +133,7 @@
         image: "{{rmq_ami}}"
         wait: yes
         wait_timeout: 300
-        instance_tags:
+        tags:
           Name: "rmq01"
           Project: Project
           Owner: Tony
@@ -151,7 +151,7 @@
         image: "{{mysql_ami}}"
         wait: yes
         wait_timeout: 300
-        instance_tags:
+        tags:
           Name: "db01"
           Project: Project
           Owner: Tony
