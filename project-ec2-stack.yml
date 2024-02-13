@@ -32,7 +32,7 @@
         description: Allow port 80 from anywhere and all ports within SG
         region: "{{region}}"
         vpc_id: "{{vpcid}}"
-        rule:
+        rules:
           - proto: tcp
             from_port: 80
             to_port: 80
@@ -46,7 +46,7 @@
         region: "{{region}}"
         vpc_id: "{{vpcid}}"
         purge_rules: no
-        rule:
+        rules:
           - proto: tcp
             from_port: 80
             to_port: 80
