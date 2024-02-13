@@ -84,11 +84,7 @@
           Project: Project
           Owner: Tony
         exact_count: 1
-        count_tag:
-          Name: "web01"
-          Project: Project
-          Owner: Tony
-        group_id: "{{Project_ec2_SG_out.group_id}}"
+        security_group: "{{Project_ec2_SG_out.group_id}}"
         vpc_subnet_id: "{{privsub1id}}"
       register: web01_out
 
@@ -106,11 +102,7 @@
           Project: Project
           Owner: Tony
         exact_count: 1
-        count_tag:
-          Name: "app01"
-          Project: Project
-          Owner: Tony
-        group_id: "{{Project_ec2_SG_out.group_id}}"
+        security_group: "{{Project_ec2_SG_out.group_id}}"
         vpc_subnet_id: "{{privsub1id}}"
       register: app01_out
 
@@ -128,11 +120,7 @@
           Project: Project
           Owner: Tony
         exact_count: 1
-        count_tag:
-          Name: "mc01"
-          Project: Project
-          Owner: Tony
-        group_id: "{{Project_ec2_SG_out.group_id}}"
+        security_group: "{{Project_ec2_SG_out.group_id}}"
         vpc_subnet_id: "{{privsub1id}}"
       register: mc01_out
 
@@ -150,11 +138,7 @@
           Project: Project
           Owner: Tony
         exact_count: 1
-        count_tag:
-          Name: "rmq01"
-          Project: Project
-          Owner: Tony
-        group_id: "{{Project_ec2_SG_out.group_id}}"
+        security_group: "{{Project_ec2_SG_out.group_id}}"
         vpc_subnet_id: "{{privsub1id}}"
       register: rmq01_out
 
@@ -172,11 +156,7 @@
           Project: Project
           Owner: Tony
         exact_count: 1
-        count_tag:
-          Name: "db01"
-          Project: Project
-          Owner: Tony
-        group_id: "{{Project_ec2_SG_out.group_id}}"
+        security_group: "{{Project_ec2_SG_out.group_id}}"
         vpc_subnet_id: "{{privsub1id}}"
       register: db01_out
 
