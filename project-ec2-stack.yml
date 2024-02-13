@@ -55,4 +55,17 @@
           - proto:
             from_port: 22
             to_port: 22
-            group_id: "{{Bastion_SG_out}}"
+            group_id: "{{BastionSGid}}"
+      register:  Project_ec2_SG_out
+
+    - name: Update ec2 SG to allow all traffic in this SG. For host internal communication
+      ec2_group:
+        name: Project_ec2_SG
+        description: Allow all traffic internally for all ec2 hosts
+        region: "{{region}}"
+        vpc_id: "{{vpcid}}"
+        purge_rules: no
+        rules:
+          - proto: all
+            group_id: "{{Project_ec2_SG_out.group_id}}"
+
