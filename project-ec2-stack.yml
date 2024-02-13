@@ -190,7 +190,7 @@
     
     - name: Create file hostip
       file:
-        path: "provision-stack/group_vars/hostip"
+        path: "provision-stack/group_vars/hostsip"
         state: touch
 
 
