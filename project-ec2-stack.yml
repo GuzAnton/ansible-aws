@@ -192,6 +192,11 @@
       file:
         path: "provision-stack/group_vars/hostsip"
         state: touch
+    
+    - name: Create file Inventory
+      file:
+        path: "provivision-stack/inventory"
+        state: touch
 
 
     - name: Insert/update Hosts ip & Name in file provision-stack/group_vars/hostsip
