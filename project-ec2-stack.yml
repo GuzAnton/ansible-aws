@@ -67,4 +67,22 @@
             group_id: "{{Project_ec2_SG_out.group_id}}"
 
 
+    - name: Creating NGINX web01
+      ec2_instance:
+        name: "web01"
+        key_name: "ec2-project-key"
+        region: "{{region}}"
+        instance_type: t2.micro
+        image_id: "{{nginx_ami}}"
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "Bastion_host"
+          Project: Test_Project
+          Owner: Tony
+        exact_count: 1
+        security_group: "{{Project_ec2_SG_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: web01_out  
+
     
