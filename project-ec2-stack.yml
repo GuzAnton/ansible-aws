@@ -183,7 +183,7 @@
         path: "provision-stack"
         state: directory
 
-    - name: Создать папку group_vars внутри provision-stack
+    - name: Create group_vars inside provision-stack
       file:
         path: "provision-stack/group_vars"
         state: directory
