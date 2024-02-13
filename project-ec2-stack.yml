@@ -7,9 +7,6 @@
     - name: Import VPC setup variables
       include_vars: vars/output_vars
 
-    - name: Import AMI setup variables
-      include_vars: vars/ec2_setup
-
     - name: Import VPC setup
       include_vars: vars/vpc_setup
 
@@ -163,4 +160,3 @@
     - debug:
         var: db01_out
 
-        
