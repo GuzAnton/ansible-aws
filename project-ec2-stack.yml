@@ -74,7 +74,7 @@
       ec2_instance:
         name: web01
         region: "{{region}}"
-        key_name: ec2-project-key
+        key_name: "ec2-project-key"
         instance_type: t2.micro
         image: "{{nginx_ami}}"
         wait: yes
@@ -92,7 +92,7 @@
       ec2_instance:
         name: app01
         region: "{{region}}"
-        key_name: ec2-project-key
+        key_name: "ec2-project-key"
         instance_type: t2.micro
         image: "{{tomcat_ami}}"
         wait: yes
@@ -110,7 +110,7 @@
       ec2_instance:
         name: mc01
         region: "{{region}}"
-        key_name: ec2-project-key
+        key_name: "ec2-project-key"
         instance_type: t2.micro
         image: "{{memcache_ami}}"
         wait: yes
@@ -128,7 +128,7 @@
       ec2_instance:
         name: rmq01
         region: "{{region}}"
-        key_name: ec2-project-key
+        key_name: "ec2-project-key"
         instance_type: t2.micro
         image: "{{rmq_ami}}"
         wait: yes
@@ -146,7 +146,7 @@
       ec2_instance:
         name: db01
         region: "{{region}}"
-        key_name: ec2-project-key
+        key_name: "ec2-project-key"
         instance_type: t2.micro
         image: "{{mysql_ami}}"
         wait: yes
