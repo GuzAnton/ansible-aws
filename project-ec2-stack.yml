@@ -77,7 +77,7 @@
         wait: yes
         wait_timeout: 300
         tags:
-          Name: "Bastion_host"
+          Name: "web01"
           Project: Test_Project
           Owner: Tony
         exact_count: 1
@@ -85,4 +85,77 @@
         vpc_subnet_id: "{{pubsub1id}}"
       register: web01_out  
 
+    - name: Creating Tomcat app01
+      ec2_instance:
+        name: "app01"
+        key_name: "ec2-project-key"
+        region: "{{region}}"
+        instance_type: t2.micro
+        image_id: "{{tomcat_ami}}"
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "app01"
+          Project: Test_Project
+          Owner: Tony
+        exact_count: 1
+        security_group: "{{Project_ec2_SG_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: app01_out  
     
+    - name: Creating Memcache mc01
+      ec2_instance:
+        name: "mc01"
+        key_name: "ec2-project-key"
+        region: "{{region}}"
+        instance_type: t2.micro
+        image_id: "{{memcache_ami}}"
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "mc01"
+          Project: Test_Project
+          Owner: Tony
+        exact_count: 1
+        security_group: "{{Project_ec2_SG_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: mc01_out
+    
+    - name: Creating RabbitMQ rmq01
+      ec2_instance:
+        name: "rmq01"
+        key_name: "ec2-project-key"
+        region: "{{region}}"
+        instance_type: t2.micro
+        image_id: "{{rmq_ami}}"
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "rmq01"
+          Project: Test_Project
+          Owner: Tony
+        exact_count: 1
+        security_group: "{{Project_ec2_SG_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: rmq01_out
+
+    - name: Creating Mysql db01
+      ec2_instance:
+        name: "db01"
+        key_name: "ec2-project-key"
+        region: "{{region}}"
+        instance_type: t2.micro
+        image_id: "{{mysql_ami}}"
+        wait: yes
+        wait_timeout: 300
+        tags:
+          Name: "db01"
+          Project: Test_Project
+          Owner: Tony
+        exact_count: 1
+        security_group: "{{Project_ec2_SG_out.group_id}}"
+        vpc_subnet_id: "{{pubsub1id}}"
+      register: db01_out
+
+    - debug:
+        var: db01_out
