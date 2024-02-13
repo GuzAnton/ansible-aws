@@ -195,7 +195,7 @@
     
     - name: Create file Inventory
       file:
-        path: "provivision-stack/inventory"
+        path: "provision-stack/inventory"
         state: touch
 
 
