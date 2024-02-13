@@ -178,6 +178,20 @@
           - "{{pubsub2id}}"
           - "{{pubsub3id}}"
 
+    - name: Create directory provision-stack and group_vars
+      hosts: localhost
+      tasks:
+        - name: Create provision-stack
+          file:
+            path: "provision-stack"
+            state: directory
+
+        - name: Создать папку group_vars внутри provision-stack
+          file:
+            path: "provision-stack/group_vars"
+            state: directory
+
+
     - name: Insert/update Hosts ip & Name in file provision-stack/group_vars/hostsip
       blockinfile:
         path: provision-stack/group_vars/hostsip # required. The file to modify. Before Ansible 2.3 this option was only usable as I(dest), I(destfile) and I(name).
@@ -227,4 +241,3 @@
           [stack_inst:vars]
           ansible_user=ubuntu
           ansible_ssh_private_key_file=ec2-project-key.pem
-          
