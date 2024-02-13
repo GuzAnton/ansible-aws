@@ -72,7 +72,7 @@
 
     - name: Create NGINX web01
       ec2_instance:
-        name: web01
+        name: "web01"
         region: "{{region}}"
         key_name: "ec2-project-key"
         instance_type: t2.micro
@@ -90,7 +90,7 @@
 
     - name: Create Tomcat app01
       ec2_instance:
-        name: app01
+        name: "app01"
         region: "{{region}}"
         key_name: "ec2-project-key"
         instance_type: t2.micro
@@ -108,7 +108,7 @@
 
     - name: Create Memcache mc01
       ec2_instance:
-        name: mc01
+        name: "mc01"
         region: "{{region}}"
         key_name: "ec2-project-key"
         instance_type: t2.micro
@@ -126,7 +126,7 @@
 
     - name: Create RabbitMQ rmq01
       ec2_instance:
-        name: rmq01
+        name: "rmq01"
         region: "{{region}}"
         key_name: "ec2-project-key"
         instance_type: t2.micro
@@ -144,7 +144,7 @@
 
     - name: Create MySQL db01
       ec2_instance:
-        name: db01
+        name: "db01"
         region: "{{region}}"
         key_name: "ec2-project-key"
         instance_type: t2.micro
