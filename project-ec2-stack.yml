@@ -158,4 +158,73 @@
       register: db01_out
 
     - debug:
-        var: db01_out
+        var: db01_out.instances[0].instance_id
+
+    - local_action:
+        module: ec2_elb_lb
+        region: "{{region}}"
+        state: present 
+        name: "Project-ELB" 
+        listeners:
+          - protocol: http # optional are http, https, ssl, tcp
+            load_balancer_port: 80
+            instance_port: 80
+        instance_ids:
+          - "{{web01_out.instances[0].instance_id}}"  
+        purge_instance_ids: True 
+        security_group_ids: "{{ProjectELBSG_out.group_id}}"
+        subnets: 
+          - "{{pubsub1id}}"
+          - "{{pubsub2id}}"
+          - "{{pubsub3id}}"
+
+    - name: Insert/update Hosts ip & Name in file provision-stack/group_vars/hostsip
+      blockinfile:
+        path: provision-stack/group_vars/hostsip # required. The file to modify. Before Ansible 2.3 this option was only usable as I(dest), I(destfile) and I(name).
+        block: |
+          web01_ip: {{web01_out.instances[0].private_ip_address}}
+          app01_ip: {{app01_out.instances[0].private_ip_address}}
+          rmq01_ip: {{rmq01_out.instances[0].private_ip_address}}
+          mc01_ip: {{mc01_out.instances[0].private_ip_address}}
+          db01_ip: {{db01_out.instances[0].private_ip_address}}
+
+    - name: Copy key to provision-stack directory
+      copy:
+        src: ec2-project-key.pem
+        dest: provision-stack/ec2-project-key.pem
+        mode: 0400
+
+    - name: Insert/update Inventory file provision-stack/inventory
+      blockinfile:
+        path: provision-stack/inventory
+        block: |
+          web01 ansible_host={{web01_out.instances[0].private_ip_address}}
+          app01 ansible_host={{app01_out.instances[0].private_ip_address}}
+          rmq01 ansible_host={{rmq01_out.instances[0].private_ip_address}}
+          mc01 ansible_host={{mc01_out.instances[0].private_ip_address}}
+          db01 ansible_host={{db01_out.instances[0].private_ip_address}}
+          cntl ansible_host=127.0.0.1 ansible_connection=local
+          [websrvgrp]
+          web01
+          [appsrvgrp]
+          app01
+          [rmqsrvgrp]
+          rmq01
+          [mcsrvgrp]
+          mc01
+          [dbsrvgrp]
+          db01
+          [control]
+          cntl
+          
+          [stack_inst:children]
+          websrvgrp
+          appsrvgrp
+          rmqsrvgrp
+          mcsrvgrp
+          dbsrvgrp
+
+          [stack_inst:vars]
+          ansible_user=ubuntu
+          ansible_ssh_private_key_file=ec2-project-key.pem
+          
