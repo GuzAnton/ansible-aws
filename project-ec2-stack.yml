@@ -18,7 +18,7 @@
   
     - name: Save key in a file
       copy: 
-        content: "key_pair_out.key.private_key"
+        content: "{{key_pair_out.key.private_key}}"
         dest: "./ec2-project-key.pem"
         mode: 0600
       when: key_pair_out.changed
