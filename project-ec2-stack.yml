@@ -154,7 +154,7 @@
           Owner: Tony
         exact_count: 1
         security_group: "{{Project_ec2_SG_out.group_id}}"
-        vpc_subnet_id: "{{pubsub3idsub1id}}"
+        vpc_subnet_id: "{{privsub3id}}"
       register: db01_out
 
     - debug:
