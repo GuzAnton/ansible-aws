@@ -192,13 +192,11 @@
       file:
         path: "provision-stack/group_vars/hostsip"
         state: touch
-      when: not hostip.stat.exists
     
     - name: Create file Inventory
       file:
         path: "provision-stack/inventory"
         state: touch
-      when: not inventory.stat.exists
 
     - name: Insert/update Hosts ip & Name in file provision-stack/group_vars/hostsip
       blockinfile:
