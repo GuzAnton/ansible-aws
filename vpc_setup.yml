@@ -112,11 +112,11 @@
             gateway_id: "{{igw_out.gateway_id}}"
       register: pubRT_out
 
-    - name: Create new NAT gatewayand allocate EIP 
+    - name: Create new NAT gateway and allocate EIP 
       ec2_vpc_nat_gateway:
         state: "{{state}}"
         region: "{{region}}"
-        subnet_id: "{{pubsub1_out.subnet.id}}"
+        subnet_id: "{{privsub1_out.subnet.id}}"
         wait: yes
         if_exist_do_not_create: true
       register: NATGW_out
