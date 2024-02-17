@@ -209,7 +209,7 @@
       file:
         src: project-key.pem
         dest: provision-stack/project-key.pem
-        state: moved
+        state: got: moved
         mode: 0400
 
     - name: Insert/update Inventory file provision-stack/inventory
