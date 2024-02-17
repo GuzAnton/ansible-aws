@@ -205,10 +205,16 @@
           mc01_ip: {{mc01_out.instances[0].private_ip_address}}
           db01_ip: {{db01_out.instances[0].private_ip_address}}
 
+    - name: Check if the file exists
+      ansible.builtin.stat:
+        path: ./project-key.pem
+      register: file_status
+
     - name: Move key to provision-stack directory
       ansible.builtin.command:
         cmd: mv project-key.pem provision-stack/project-key.pem
         warn: no
+      when: file_status.stat.exists    
 
     - name: Insert/update Inventory file provision-stack/inventory
       blockinfile:
