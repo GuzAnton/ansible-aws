@@ -12,14 +12,14 @@
 
     - name: Create PROJECT ec2 key
       ec2_key:
-        name: ec2-project-key
+        name: project-key
         region: "{{region}}"
       register: key_pair_out
   
     - name: Save key in a file
       copy: 
         content: "{{key_pair_out.key.private_key}}"
-        dest: "./ec2-project-key.pem"
+        dest: ./project-key.pem
         mode: 0600
       when: key_pair_out.changed
 
@@ -70,7 +70,7 @@
     - name: Creating NGINX web01
       ec2_instance:
         name: "web01"
-        key_name: "ec2-project-key"
+        key_name: "project-key"
         region: "{{region}}"
         instance_type: t2.micro
         image_id: "{{nginx_ami}}"
@@ -88,7 +88,7 @@
     - name: Creating Tomcat app01
       ec2_instance:
         name: "app01"
-        key_name: "ec2-project-key"
+        key_name: "project-key"
         region: "{{region}}"
         instance_type: t2.micro
         image_id: "{{tomcat_ami}}"
@@ -106,7 +106,7 @@
     - name: Creating Memcache mc01
       ec2_instance:
         name: "mc01"
-        key_name: "ec2-project-key"
+        key_name: "project-key"
         region: "{{region}}"
         instance_type: t2.micro
         image_id: "{{memcache_ami}}"
@@ -124,7 +124,7 @@
     - name: Creating RabbitMQ rmq01
       ec2_instance:
         name: "rmq01"
-        key_name: "ec2-project-key"
+        key_name: "project-key"
         region: "{{region}}"
         instance_type: t2.micro
         image_id: "{{rmq_ami}}"
@@ -142,7 +142,7 @@
     - name: Creating Mysql db01
       ec2_instance:
         name: "db01"
-        key_name: "ec2-project-key"
+        key_name: "project-key"
         region: "{{region}}"
         instance_type: t2.micro
         image_id: "{{mysql_ami}}"
@@ -156,9 +156,6 @@
         security_group: "{{Project_ec2_SG_out.group_id}}"
         vpc_subnet_id: "{{privsub3id}}"
       register: db01_out
-
-    - debug:
-        var: db01_out.instances[0].instance_id
 
     - local_action:
         module: ec2_elb_lb
@@ -209,9 +206,10 @@
           db01_ip: {{db01_out.instances[0].private_ip_address}}
 
     - name: Copy key to provision-stack directory
-      copy:
-        src: ec2-project-key.pem
-        dest: provision-stack/ec2-project-key.pem
+      file:
+        src: project-key.pem
+        dest: provision-stack/project-key.pem
+        state: moved
         mode: 0400
 
     - name: Insert/update Inventory file provision-stack/inventory
