@@ -20,7 +20,7 @@
       copy: 
         content: "{{key_pair_out.key.private_key}}"
         dest: ./project-key.pem
-        mode: 0600
+        mode: 0400
       when: key_pair_out.changed
 
     - name: Create SG for ELB
@@ -206,10 +206,9 @@
           db01_ip: {{db01_out.instances[0].private_ip_address}}
 
     - name: Copy key to provision-stack directory
-      file:
+      ansible.builtin.mv:
         src: project-key.pem
         dest: provision-stack/project-key.pem
-        state: got: moved
         mode: 0400
 
     - name: Insert/update Inventory file provision-stack/inventory
