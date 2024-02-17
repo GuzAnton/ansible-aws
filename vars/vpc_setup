@@ -23,7 +23,7 @@ state: present
 
 #Bastion vars
 bastion_ami: ami-0e5f882be1900e43b
-MYIP: 193.93.77.227/32
+MYIP: 176.36.180.171/32
 
 # Host vars
 nginx_ami: ami-0e5f882be1900e43b
