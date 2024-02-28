@@ -1,0 +1,77 @@
+- name: Install and enable RabbitMQ
+  gather_facts: no
+  hosts: rmqsrvgrp
+  tasks:
+
+    - name: Add Erlang repository
+      apt_repository:
+        repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
+        state: present
+      apt_key: 
+        url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
+        state: present
+      tags:
+        - package
+    
+    - name: Install Erlang
+      apt:
+        name: erlang
+        state: present
+        update_cache: yes
+        cache_valid_time: 86400
+      tags:
+        - package
+
+    - name: Execute the command in remote shell; stdout goes to the specified file on the remote
+      ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
+ 
+ 
+    - name: Install rabbitmq-server
+      apt:
+        name: rabbitmq-server
+        state: present
+        update_cache: yes
+
+    - name: Start and enable RMQ
+      service:
+        name: rabbitmq-server
+        state: present
+        enabled: yes
+      tags:
+        - svc
+
+    - name: Config setup
+      copy:
+        content: |
+          [{rabbit, [{loopback_users, []}]}].
+        dest: /etc/rabbitmq/rabbitmq.config
+      notify:
+        - Restart RMQ
+      tags:
+        - conf
+  
+    - rabbitmq_user:
+        user: test
+        password: test
+        configure_priv: .*
+        read_priv: .*
+        tags: administrator
+        state: present
+      notify:
+        - Restart RMQ
+      tags:
+        - conf
+    - name: Enables the rabbitmq_management plugin
+      rabbitmq_plugin:
+        names: rabbitmq_management
+        state: enabled
+      notify:
+        - Restart RMQ
+      tags:
+        - package
+  
+  handlers:
+    - name: Restart RMQ
+      service:
+        name: rabbitmq-server
+        state: restarted
