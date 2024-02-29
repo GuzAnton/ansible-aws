@@ -7,6 +7,7 @@
       apt_repository:
         repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
         state: present
+        update_cache: yes
       
     - name: Add key  
       apt_key: 
