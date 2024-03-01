@@ -1,13 +1,20 @@
 #!/bin/bash
 
-# Add Erlang GPG key
-wget -O - https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo apt-key add -
+# Update apt package lists
+sudo apt update
 
-# Add Erlang repository
-echo "deb https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib" | sudo tee /etc/apt/sources.list.d/erlang.list
+# Install required packages
+sudo apt install curl wget gnupg apt-transport-https -y
 
-# Update apt package index
+# Download Erlang Solutions GPG key and save it to /usr/share/keyrings/erlang.gpg
+curl -fsSL https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo gpg --dearmor -o /usr/share/keyrings/erlang.gpg
+
+# Add Erlang Solutions repository to sources.list.d/erlang.list
+echo "deb [signed-by=/usr/share/keyrings/erlang.gpg] https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib" | sudo tee /etc/apt/sources.list.d/erlang.list
+
+# Update apt package lists after adding repository
 sudo apt update
 
 # Install Erlang
-sudo apt install -y erlang
+sudo apt install erlang -y
+
