@@ -11,8 +11,7 @@
         repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
         state: present
  
-    - name: Install erlang
+    - name: Install Erlang
       apt:
         name: erlang
         state: present
-        update_cache: yes
