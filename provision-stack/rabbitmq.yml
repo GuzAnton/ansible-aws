@@ -2,14 +2,9 @@
   hosts: rmqsrvgrp
   gather_facts: no
   tasks:
-    - name: Install Erlang and its dependencies
-      copy:
-        src: install_erlang.sh
-        dest: /tmp/install_erlang.sh
-        mode: 0755  
 
     - name: Execute the shell script to install Erlang and its dependencies
-      script: /tmp/install_erlang.sh
+      script: ./install_erlang.sh
 
     - name: Install RabbitMQ server
       apt:
