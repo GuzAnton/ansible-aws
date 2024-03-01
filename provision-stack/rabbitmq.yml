@@ -12,11 +12,13 @@
         state: present
 
     - name: Install Erlang
-      apt:
+      ansible.builtin.apt:
         name: erlang
         update_cache: yes
         cache_valid_time: 86400
         state: present
+        install_recommends: yes
+        
       tags:
         - package
 
