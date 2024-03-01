@@ -11,6 +11,16 @@
         repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
         state: present
 
+    - name: Install Erlang Dependencies
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - erlang-common-test
+        - erlang-debugger
+        - erlang-et
+        # Add other dependencies as needed
+
     - name: Install Erlang
       ansible.builtin.apt:
         name: erlang
@@ -32,6 +42,14 @@
     - apt_repository:
         repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
         state: present
+      tags:
+        - package
+
+    - name: Install Rabbit MQ
+      apt:
+        name: rabbitmq-server
+        state: present
+        update_cache: yes
       tags:
         - package
 
