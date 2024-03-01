@@ -17,5 +17,5 @@
  
     - name: Install specific version of Erlang
       apt:
-        name: erlang=1:25.2.2-2
+        name: erlang
         state: present
