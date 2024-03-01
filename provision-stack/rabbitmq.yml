@@ -2,55 +2,14 @@
   hosts: rmqsrvgrp
   gather_facts: no
   tasks:
-    - name: Add Erlang Solutions Repository Key
-      apt_key:
-        url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
-        state: present
-
-    - name: Add Erlang Solutions Repository
-      apt_repository:
-        repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
-        state: present
-
-    - name: Update Package Cache
-      ansible.builtin.apt:
-        update_cache: yes
-        cache_valid_time: 86400
-
     - name: Install Erlang and its dependencies
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-        update_cache: yes
-      loop:
-        - erlang
-        - erlang-common-test
-        - erlang-debugger
-        - erlang-et
-        - erlang-megaco
-        - erlang-observer
-        - erlang-reltool
-        - erlang-test-server
-        - erlang-wx
-        - erlang-ic-java
-        - erlang-src
-        - erlang-examples
-      register: erlang_install_result
-      ignore_errors: yes
+      copy:
+        src: install_erlang.sh
+        dest: /tmp/install_erlang.sh
+        mode: 0755  
 
-    - name: Retry installing Erlang and its dependencies (if failed) with recommended options
-      ansible.builtin.apt:
-        name: "{{ item }}"
-        state: present
-        update_cache: yes
-        install_recommends: yes
-      loop: "{{ erlang_install_result.results | selectattr('failed') | map(attribute='item') | list }}"
-      when: erlang_install_result.results | selectattr('failed') | map(attribute='item') | list | length > 0
-
-    - name: Fail if Erlang installation is still unsuccessful
-      fail:
-        msg: "Failed to install Erlang and its dependencies"
-      when: erlang_install_result | failed
+    - name: Execute the shell script to install Erlang and its dependencies
+      script: /tmp/install_erlang.sh
 
     - name: Install RabbitMQ server
       apt:
