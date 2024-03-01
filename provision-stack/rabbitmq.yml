@@ -3,15 +3,39 @@
   gather_facts: no
   tasks:
 
-    - name: Execute the shell script to install Erlang and its dependencies
-      script: ./install_erlang.sh
-
-    - name: Install RabbitMQ server
+    - name: Update apt package cache
       apt:
-        name: rabbitmq-server
-        state: present
         update_cache: yes
 
+    - name: Install required packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - curl
+        - wget
+        - gnupg
+        - apt-transport-https
+
+    - name: Add Erlang Solutions GPG key
+      shell: curl -fsSL https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo gpg --dearmor -o /usr/share/keyrings/erlang.gpg
+
+    - name: Add Erlang Solutions repository
+      lineinfile:
+        path: /etc/apt/sources.list.d/erlang.list
+        line: "deb [signed-by=/usr/share/keyrings/erlang.gpg] https://packages.erlang-solutions.com/ubuntu {{ ansible_distribution_release }} contrib"
+        create: yes
+        state: present
+
+    - name: Update apt package cache after adding repository
+      apt:
+        update_cache: yes
+
+    - name: Install Erlang
+      apt:
+        name: erlang
+        state: present
+    
     - name: Start & Enable RabbitMQ service
       service:
         name: rabbitmq-server
