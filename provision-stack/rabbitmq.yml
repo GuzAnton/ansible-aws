@@ -10,6 +10,10 @@
     - apt_repository:
         repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
         state: present
+
+    - name: Update apt cache and upgrade packages
+      apt:
+        upgrade: yes
  
     - name: Install specific version of Erlang
       apt:
