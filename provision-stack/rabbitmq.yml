@@ -1,43 +1,55 @@
-- name: Install and enable RabbitMQ
-  gather_facts: no
+- name: Install & Setup RabbitMQ with user
   hosts: rmqsrvgrp
+  gather_facts: no
   tasks:
+    - name: Install Erlang Repository Package
+      apt:
+        deb: https://packages.erlang-solutions.com/erlang-solutions_1.0_all.deb
+      tags:
+        - package
 
-    - name: Add Erlang repository
-      apt_repository:
-        repo: deb https://binaries.erlang-solutions.com/debian xenial contrib
-        state: present
-        update_cache: yes
-      
-    - name: Add Erlang key  
-      apt_key: 
-        url: https://binaries.erlang-solutions.com/debian xenial contrib
+    - name: Add an Erlang Solution public Key
+      apt_key:
+        url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
         state: present
       tags:
         - package
-    
-    - name: Add RabbitMQ repo
-      apt_repository:
-        repo: deb https://d1.bintray.com/rabbitmq/debian xenial contrib
-        state: present
+
+    - name: Install Erlang
+      apt:
+        name: erlang
         update_cache: yes
-
-    - name: Install RabbitMQ 
-      apt_key:
-        url: https://d1.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc
+        cache_valid_time: 86400
         state: present
+      tags:
+        - package
 
-    - name: Install rabbitmq-server
+    - name: Add an Apt signing key, uses whichever key is at the URL
+      apt_key:
+        url: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+        state: present
+      tags:
+        - package
+
+    - apt_repository:
+        repo: deb https://dl.bintray.com/rabbitmq/debian bionic main
+        state: present
+      tags:
+        - package
+
+    - name: Install Rabbit MQ
       apt:
         name: rabbitmq-server
         state: present
-        install_recommends: yes
         update_cache: yes
+      tags:
+        - package
 
-    - name: Start and enable RMQ
+
+    - name: Start & Enable RMQ
       service:
         name: rabbitmq-server
-        state: present
+        state: started
         enabled: yes
       tags:
         - svc
@@ -51,18 +63,22 @@
         - Restart RMQ
       tags:
         - conf
-  
+
+
     - rabbitmq_user:
         user: test
         password: test
         configure_priv: .*
         read_priv: .*
+        write_priv: .*
         tags: administrator
         state: present
       notify:
         - Restart RMQ
       tags:
         - conf
+
+
     - name: Enables the rabbitmq_management plugin
       rabbitmq_plugin:
         names: rabbitmq_management
@@ -71,7 +87,7 @@
         - Restart RMQ
       tags:
         - package
-  
+
   handlers:
     - name: Restart RMQ
       service:
