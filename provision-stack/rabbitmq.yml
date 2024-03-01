@@ -2,7 +2,7 @@
   hosts: rmqsrvgrp
   gather_facts: no
   tasks:
-
+   
     - name: Update apt package cache
       apt:
         update_cache: yes
@@ -23,7 +23,7 @@
     - name: Add Erlang Solutions repository
       lineinfile:
         path: /etc/apt/sources.list.d/erlang.list
-        line: "deb [signed-by=/usr/share/keyrings/erlang.gpg] https://packages.erlang-solutions.com/ubuntu {{ ansible_distribution_release }} contrib"
+        line: "deb [signed-by=/usr/share/keyrings/erlang.gpg] https://packages.erlang-solutions.com/ubuntu {{ ansible_lsb.id|lower }} {{ ansible_lsb.codename }} contrib"
         create: yes
         state: present
 
@@ -35,7 +35,7 @@
       apt:
         name: erlang
         state: present
-    
+
     - name: Start & Enable RabbitMQ service
       service:
         name: rabbitmq-server
