@@ -2,22 +2,23 @@
   hosts: rmqsrvgrp
   gather_facts: no
   tasks:
-    - name: Update apt package cache
-      apt:
-        update_cache: yes
-
-    - name: Add Erlang Solutions repository key
+    - name: Add Erlang Solutions Repository Key
       apt_key:
         url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
         state: present
 
-    - name: Add Erlang Solutions repository
+    - name: Add Erlang Solutions Repository
       apt_repository:
-        repo: deb https://packages.erlang-solutions.com/ubuntu focal contrib
+        repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
         state: present
 
+    - name: Update Package Cache
+      ansible.builtin.apt:
+        update_cache: yes
+        cache_valid_time: 86400
+
     - name: Install Erlang and its dependencies
-      apt:
+      ansible.builtin.apt:
         name: "{{ item }}"
         state: present
         update_cache: yes
@@ -26,8 +27,30 @@
         - erlang-common-test
         - erlang-debugger
         - erlang-et
-        # Add more Erlang dependencies as needed
+        - erlang-megaco
+        - erlang-observer
+        - erlang-reltool
+        - erlang-test-server
+        - erlang-wx
+        - erlang-ic-java
+        - erlang-src
+        - erlang-examples
+      register: erlang_install_result
       ignore_errors: yes
+
+    - name: Retry installing Erlang and its dependencies (if failed) with recommended options
+      ansible.builtin.apt:
+        name: "{{ item }}"
+        state: present
+        update_cache: yes
+        install_recommends: yes
+      loop: "{{ erlang_install_result.results | selectattr('failed') | map(attribute='item') | list }}"
+      when: erlang_install_result.results | selectattr('failed') | map(attribute='item') | list | length > 0
+
+    - name: Fail if Erlang installation is still unsuccessful
+      fail:
+        msg: "Failed to install Erlang and its dependencies"
+      when: erlang_install_result | failed
 
     - name: Install RabbitMQ server
       apt:
