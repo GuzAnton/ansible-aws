@@ -4,11 +4,11 @@
   tasks:
     - name: Add erlang Repo
       apt_key: 
-        url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
+        url: https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA
         state: present
  
     - apt_repository:
-        repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
+        repo: deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key
         state: present
 
     - name: Update apt cache and upgrade packages
@@ -17,5 +17,5 @@
  
     - name: Install specific version of Erlang
       apt:
-        name: erlang
+        name: erlang=1:25.2.2-2
         state: present
