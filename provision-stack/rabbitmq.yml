@@ -26,13 +26,13 @@
 
     - name: Add an Apt signing key, uses whichever key is at the URL
       apt_key:
-        url: https://github.com/rabbitmq/signing-keys/releases/download/2.0/rabbitmq-release-signing-key.asc
+        url: https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc
         state: present
       tags:
         - package
 
     - apt_repository:
-        repo: deb https://dl.bintray.com/rabbitmq/debian bionic main
+        repo: deb https://packages.erlang-solutions.com/ubuntu bionic contrib
         state: present
       tags:
         - package
