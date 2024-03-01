@@ -29,5 +29,5 @@ MYIP: 176.36.180.171/32
 nginx_ami: ami-0e5f882be1900e43b
 tomcat_ami: ami-0e5f882be1900e43b
 memcache_ami: ami-0e5f882be1900e43b
-rmq_ami: ami-0e5f882be1900e43b
+rmq_ami: ami-08447c25f2e9dc66c
 mysql_ami: ami-0e5f882be1900e43b
