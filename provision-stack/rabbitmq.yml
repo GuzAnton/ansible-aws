@@ -2,20 +2,78 @@
   gather_facts: no
   hosts: rmqsrvgrp
   tasks:
-    - name: Add erlang Repo
-      apt_key: 
-        url: https://keys.openpgp.org/vks/v1/by-fingerprint/0A9AF2115F4687BD29803A206B73A36E6026DFCA
+
+    - name: Add Erlang repository
+      apt_repository:
+        repo: deb https://binaries.erlang-solutions.com/debian xenial contrib
         state: present
- 
-    - apt_repository:
-        repo: deb https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-server/gpg.9F4587F226208342.key
+        update_cache: yes
+      
+    - name: Add Erlang key  
+      apt_key: 
+        url: https://binaries.erlang-solutions.com/debian xenial contrib
+        state: present
+      tags:
+        - package
+    
+    - name: Add RabbitMQ repo
+      apt_repository:
+        repo: deb https://d1.bintray.com/rabbitmq/debian xenial contrib
+        state: present
+        update_cache: yes
+
+    - name: Install RabbitMQ 
+      apt_key:
+        url: https://d1.bintray.com/rabbitmq/Keys/rabbitmq-release-signing-key.asc
         state: present
 
-    - name: Update apt cache and upgrade packages
+    - name: Install rabbitmq-server
       apt:
-        upgrade: yes
- 
-    - name: Install specific version of Erlang
-      apt:
-        name: erlang=1:25.2.2-2
+        name: rabbitmq-server
         state: present
+        install_recommends: yes
+        update_cache: yes
+
+    - name: Start and enable RMQ
+      service:
+        name: rabbitmq-server
+        state: present
+        enabled: yes
+      tags:
+        - svc
+
+    - name: Config setup
+      copy:
+        content: |
+          [{rabbit, [{loopback_users, []}]}].
+        dest: /etc/rabbitmq/rabbitmq.config
+      notify:
+        - Restart RMQ
+      tags:
+        - conf
+  
+    - rabbitmq_user:
+        user: test
+        password: test
+        configure_priv: .*
+        read_priv: .*
+        tags: administrator
+        state: present
+      notify:
+        - Restart RMQ
+      tags:
+        - conf
+    - name: Enables the rabbitmq_management plugin
+      rabbitmq_plugin:
+        names: rabbitmq_management
+        state: enabled
+      notify:
+        - Restart RMQ
+      tags:
+        - package
+  
+  handlers:
+    - name: Restart RMQ
+      service:
+        name: rabbitmq-server
+        state: restarted
