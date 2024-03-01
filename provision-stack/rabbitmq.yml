@@ -2,18 +2,20 @@
   hosts: rmqsrvgrp
   gather_facts: no
   tasks:
-    - name: Set permissions and install Erlang
+    - name: Copy Erlang installation script
+      copy:
+        src: group_vars/install_erlang.sh
+        dest: ./install_erlang.sh
+        mode: u+x  # Set the executable permission
       become: yes
-      shell: |
-        sudo apt update
-        sudo apt install curl wget gnupg apt-transport-https
-        curl -fsSL https://packages.erlang-solutions.com/ubuntu/erlang_solutions.asc | sudo gpg --dearmor -o /usr/share/keyrings/erlang.gpg
-        echo "deb [signed-by=/usr/share/keyrings/erlang.gpg] https://packages.erlang-solutions.com/ubuntu $(lsb_release -cs) contrib" | sudo tee /etc/apt/sources.list.d/erlang.list
-        sudo apt update
-        sudo apt install erlang 
-        sudo chmod +x /usr/share/keyrings/erlang.gpg
-      notify:
-        - Restart RMQ
+      tags:
+        - erlang
+    
+    - name: Run Erlang installation script
+      shell: ./install_erlang.sh
+      become: yes
+      tags:
+        - erlang
 
     - name: Configure RabbitMQ
       copy:
