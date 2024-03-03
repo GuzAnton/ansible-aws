@@ -5,14 +5,14 @@
     - name: Copy Erlang installation script
       copy:
         src: group_vars/install_erlang.sh
-        dest: ./install_erlang.sh
+        dest: /tmp/install_erlang.sh
         mode: u+x  # Set the executable permission
       become: yes
       tags:
         - erlang
     
     - name: Run Erlang installation script
-      shell: ./install_erlang.sh
+      shell: /tmp/install_erlang.sh
       become: yes
       tags:
         - erlang
