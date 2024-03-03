@@ -50,6 +50,12 @@
         sudo tee /usr/share/keyrings/io.cloudsmith.rabbitmq.9F4587F226208342.gpg > /dev/null
       become: yes
 
+    - name: Create RabbitMQ repository file if it doesn't exist
+      file:
+        path: /etc/apt/sources.list.d/rabbitmq.list
+        state: touch
+      become: yes
+
     - name: Add RabbitMQ repository
       blockinfile:
         path: /etc/apt/sources.list.d/rabbitmq.list
