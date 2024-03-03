@@ -5,15 +5,15 @@
    
     - name: Copy Erlang & RabbitMQ installation script
       copy:
-        src: group_vars/install_rabbitmq.sh
-        dest: /tmp/install_rabbitmq.sh
+        src: group_vars/install_erlang.sh
+        dest: /tmp/install_erlang.sh
         mode: u+x  # Set the executable permission
       become: yes
       tags:
         - rabbitmq
     
     - name: Run Erlang & RabbitMQ installation script
-      shell: /tmp/install_rabbitmq.sh
+      shell: /tmp/install_erlang.sh
       become: yes
       tags:
         - rabbitmq
