@@ -53,7 +53,6 @@
     - name: Add RabbitMQ repository
       blockinfile:
         path: /etc/apt/sources.list.d/rabbitmq.list
-        marker: "# {mark} ANSIBLE MANAGED BLOCK {{ item }}"
         block: |
           deb [signed-by=/usr/share/keyrings/io.cloudsmith.rabbitmq.E495BB49CC4BBE5B.gpg] https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/deb/ubuntu bionic main
           deb-src [signed-by=/usr/share/keyrings/io.cloudsmith.rabbitmq.E495BB49CC4BBE5B.gpg] https://dl.cloudsmith.io/public/rabbitmq/rabbitmq-erlang/deb/ubuntu bionic main
