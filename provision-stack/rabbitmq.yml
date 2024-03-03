@@ -17,12 +17,21 @@
       tags:
         - erlang
 
-    - name: Install RabbitMQ Server
-      apt:
-        update_cache: yes
-        upgrade: dist
-        autoremove: yes
-        autoclean: yes
+    - name: Copy RabbitMQ installation script
+      copy:
+        src: group_vars/install_rabbitmq.sh
+        dest: /tmp/install_rabbitmq.sh
+        mode: u+x  # Set the executable permission
+      become: yes
+      tags:
+        - rabbitmq
+    
+    - name: Run RabbitMQ installation script
+      shell: /tmp/install_rabbitmq.sh
+      become: yes
+      tags:
+        - rabbitmq
+
 
     - name: Add RabbitMQ user
       rabbitmq_user:
