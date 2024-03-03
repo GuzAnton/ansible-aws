@@ -17,15 +17,40 @@
       tags:
         - erlang
 
-    - name: Execute the command in remote shell; stdout goes to the specified file on the remote
-      ansible.builtin.shell: curl -s https://packagecloud.io/install/repositories/rabbitmq/rabbitmq-server/script.deb.sh | sudo bash
- 
- 
-    - name: Install rabbitmq-server
+    - name: Install RabbitMQ Server
+      apt:
+        update_cache: yes
+        upgrade: dist
+        autoremove: yes
+        autoclean: yes
+
+    - name: Install curl and gnupg packages
+      apt:
+        name: "{{ item }}"
+        state: present
+      loop:
+        - curl
+        - gnupg
+
+    - name: Add RabbitMQ GPG key
+      shell: curl -fsSL https://packages.rabbitmq.com/gpg | sudo apt-key add -
+      args:
+        executable: /bin/bash
+
+    - name: Add RabbitMQ repository
+      apt_repository:
+        repo: 'deb https://dl.bintray.com/rabbitmq/debian focal main'
+        state: present
+
+    - name: Update apt cache after adding repository
+      apt:
+        update_cache: yes
+
+    - name: Install RabbitMQ server
       apt:
         name: rabbitmq-server
         state: present
-        update_cache: yes
+
 
     - name: Add RabbitMQ user
       rabbitmq_user:
