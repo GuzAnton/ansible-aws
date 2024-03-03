@@ -33,9 +33,14 @@
         - gnupg
 
     - name: Add RabbitMQ GPG key
-      shell: curl -fsSL https://packages.rabbitmq.com/gpg | sudo apt-key add -
-      args:
-        executable: /bin/bash
+      get_url:
+        url: "https://packages.rabbitmq.com/gpg"
+        dest: "/tmp/rabbitmq-gpg-key"
+
+    - name: Add RabbitMQ GPG key
+      apt_key:
+        keyring: "/tmp/rabbitmq-gpg-key"
+        state: present
 
     - name: Add RabbitMQ repository
       apt_repository:
