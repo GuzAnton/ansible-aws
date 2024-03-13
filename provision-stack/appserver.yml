@@ -1,0 +1,42 @@
+- name: Setup Tomcat & Deploy Artifact
+  hosts: appsrvgrp
+  gather_facts: no
+  vars:
+    timestamp: "{{ansible_date_time.date}}_{{ansible_date_time.hour}}_{{ansible_date_time.minute}}"
+    tom_url: https://dlcdn.apache.org/tomcat/tomcat-8/v8.5.99/bin/apache-tomcat-8.5.99.tar.gz
+  tasks:
+
+    - name: Install JDK on Ubuntu 18/20
+      apt:
+        name: openjdk-8-jdk
+        state: present
+        update_cache: yes
+
+    - name: Download Tomcat TAR BALL/Binaries
+      get_url:
+        url: "{{tom_url}}"
+        dest: /tmp/tomcat-8.tar.gz
+
+    - name: Add Tomcat group
+      group:
+        name: tomcat
+        state: present
+
+    - name: Add Tomcat user
+      user:
+        name: tomcat
+        group: tomcat
+        shell: /bin/nologin
+        home: /usr/local/tomcat8
+
+    - file:
+      path: /tmp/tomcat8
+      state: directory
+
+    - name: Extract Tomcat
+      unarchive:
+        src: /tmp/tomcat-8.tar.gz
+        dest: /tmp/tomcat8/
+        remote_src: yes
+        
+
